@@ -5,7 +5,6 @@ from tensorflow.keras.models import load_model
 import pickle
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
-import cv2
 
 class_names = {
     0: 'BED-DOUBLE',
