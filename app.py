@@ -59,7 +59,7 @@ if uploaded_file is not None:
             result = identify(uploaded_file, model)
             st.subheader("Image Result") 
             st.write(f"**{result}**")
-    if model_option == "YOLO:
+    if model_option == "YOLO":
         model = load_model('model_saved_yolo.h5')
         st.image(uploaded_file, caption="Uploaded Image.", use_column_width=False, width=200)
         st.write("")
