@@ -42,6 +42,14 @@ def identify(img, model):
     predicted_class_name = class_names.get(predicted_class_index, 'Unknown')
     return predicted_class_name
 
+def identify_yolov8(img, model):
+    img = Image.open(img).convert('L')
+    results = model(img)
+    # Customize output based on your needs (e.g., bounding boxes, class names, confidence scores)
+    predictions = results.pandas().xyxy[0]  # Extract detection results
+    return predictions
+
+
 # Streamlit App
 st.title("CAD Drawing Prediction")
 
@@ -60,11 +68,14 @@ if uploaded_file is not None:
             st.subheader("Image Result") 
             st.write(f"**{result}**")
     if model_option == "YOLO":
-        model = load_model('model_saved_yolo.h5')
+        # Load the model
+        model = YOLO('yolov8n.pt')  # Load the model configuration
+        model.load_state_dict(torch.load('yolov8_model.pth'))  # Load the saved weights
+        model.eval()  # Set model to evaluation mode
         st.image(uploaded_file, caption="Uploaded Image.", use_column_width=False, width=200)
         st.write("")
 
         if st.button("Predict"):
-            result = identify(uploaded_file, model)
-            st.subheader("Image Result") 
-            st.write(f"**{result}**")
+            results = identify_yolov8(uploaded_file, model)
+            st.subheader("Image Result")
+            st.write(results)
